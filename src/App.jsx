@@ -1,6 +1,7 @@
 import 'bulma/css/bulma.css';
 import './App.scss';
 import { useState } from 'react';
+import className from 'classnames';
 
 export const goodsFromServer = [
   'Dumplings',
@@ -41,17 +42,20 @@ export const App = () => {
 
   const viewGoods = preparedGoods(goodsFromServer, sortField, reverse);
 
+  function reset() {
+    setSortField('');
+    setReverse(false);
+  }
+
   return (
     <div className="section content">
       <div className="buttons">
         <button
           onClick={() => setSortField(SORT_BY_ALPHABET)}
           type="button"
-          className={
-            sortField === SORT_BY_ALPHABET
-              ? 'button is-success'
-              : 'button is-success is-light'
-          }
+          className={className('button is-success', {
+            'is-light': sortField !== SORT_BY_ALPHABET,
+          })}
         >
           Sort alphabetically
         </button>
@@ -59,45 +63,40 @@ export const App = () => {
         <button
           onClick={() => setSortField(SORT_BY_LENGTH)}
           type="button"
-          className={
-            sortField === SORT_BY_LENGTH
-              ? 'button is-success'
-              : 'button is-success is-light'
-          }
+          className={className('button is-success', {
+            'is-light': sortField !== SORT_BY_LENGTH,
+          })}
         >
           Sort by length
         </button>
 
         <button
-          onClick={() => {
-            setReverse(!reverse);
-          }}
+          onClick={() => setReverse(!reverse)}
           type="button"
-          className={
-            reverse ? 'button is-warning' : 'button is-warning is-light'
-          }
+          className={className('button is-warning', {
+            'is-light': !reverse,
+          })}
         >
           Reverse
         </button>
 
-        {sortField || reverse ? (
+        {(sortField || reverse) && (
           <button
-            onClick={() => {
-              setSortField('');
-              setReverse(false);
-            }}
+            onClick={reset}
             type="button"
             className="button is-danger is-light"
           >
             Reset
           </button>
-        ) : null}
+        )}
       </div>
 
       <ul>
-        {viewGoods.map(goodsItem => {
-          return <li key={goodsItem} data-cy="Good">{goodsItem}</li>;
-        })}
+        {viewGoods.map(good => (
+          <li key={good} data-cy="Good">
+            {good}
+          </li>
+        ))}
       </ul>
     </div>
   );
