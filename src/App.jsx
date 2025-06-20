@@ -96,7 +96,7 @@ export const App = () => {
 
       <ul>
         {viewGoods.map(goodsItem => {
-          return <li data-cy="Good">{goodsItem}</li>;
+          return <li key={goodsItem} data-cy="Good">{goodsItem}</li>;
         })}
       </ul>
     </div>
